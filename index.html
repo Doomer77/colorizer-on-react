@@ -1,0 +1,127 @@
+<html lang="ru">
+<head> 
+    <meta charset="UTF-8"> 
+    <title>Studying-the-React-from-Kirup-Chinnatambi-s-Book</title>
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style> 
+        #container{  
+            padding: 50px;
+            background-color: #fff;
+        }
+        #colorHeading{
+            padding: 0;
+            margin: 50px;
+            margin-bottom: -20px;
+            font-family: sans-serif;
+        }
+        .colorSquare{
+            box-shadow: 0px 0px 25px 0px #333;
+            width: 242px;
+            height: 242;
+            margin-bottom: 15px;
+        }
+        .colorArea input{
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ccc;
+        }
+        .colorArea button{
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px;
+            background-color: #666;
+            color: #fff;
+            border: 2px solid #666;
+        }
+        .colorArea button:hover{
+            background-color: #111;
+            border-color: #111;
+            cursor: pointer;
+        }
+    </style> 
+</head>
+<body>
+   <h1 id="colorHeading">Политра</h1>
+    <div id="container"></div>
+    <script type="text/babel">
+        class Colorizer extends React.Component {
+            constructor (props) {
+                super(props);
+                
+                this.state = {
+                    color: '',
+                    bgColor: 'white'
+                };
+                
+                this.colorValue = this.colorValue.bind(this);
+                this.setNewColor = this.setNewColor.bind(this);
+            }
+            
+            colorValue(event) {
+                this.setState({
+                    color: event.target.value
+                })
+            }
+            
+            setNewColor(event) {
+                this.setState({
+                    bgColor: this.state.color
+                });
+                
+                this._input.focus();
+                this._input.value = '';
+                
+                event.preventDefault();
+            }
+            
+            render () {
+                
+                let squareStyle = {
+                    backgroundColor: this.state.bgColor
+                }
+                
+                let self = this;
+                
+                return (
+                    <div className="colorArea">
+                      <div style = { squareStyle } className="colorSquare" ></div>
+              
+                      <form onSubmit = {this.setNewColor} >
+                      <input onChange = { this.colorValue } 
+                      ref = {
+                        (el) => self._input = el   
+                      }
+                      placeholder="Значение цвета" />
+                      <button type="submit">ok</button>
+                      </form>
+                      <ColorLabel color = { this.state.bgColor }/>
+                    </div>
+                );
+            }
+        }
+            
+        let heading = document.querySelector('#colorHeading');
+        
+        class ColorLabel extends React.Component {
+            render () {
+                return ReactDOM.createPortal (
+                    ': ' + this.props.color,
+                    heading
+                );
+            }
+        }  
+        
+       
+        ReactDOM.render(
+            <div>
+               <Colorizer />
+            </div>,
+            document.querySelector('#container')
+        )
+
+    </script>
+</body>
+</html>
+
